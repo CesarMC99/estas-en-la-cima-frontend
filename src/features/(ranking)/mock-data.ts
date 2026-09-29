@@ -1,4 +1,4 @@
-import type { Category, CategoryCima } from "./types";
+import type { Category, CategoryCima, Contender } from "./types";
 
 /*
  * TEMPORAL: datos de ejemplo copiados del diseño para construir las pantallas
@@ -153,3 +153,56 @@ export const MOCK_CIMAS: CategoryCima[] = [
     ],
   },
 ];
+
+/*
+ * Los perseguidores de cada categoría (del #2 hacia abajo), en céntimos.
+ * El #1 de cada categoría es el de MOCK_CIMAS.
+ */
+const MOCK_CONTENDERS: Record<string, [name: string, company: string, totalCents: number][]> = {
+  cervezas: [
+    ["Cristal", "Backus", 4_712_000],
+    ["Cusqueña", "Backus", 3_980_000],
+    ["Arequipeña", "Backus", 1_240_000],
+    ["Corona", "Backus", 890_000],
+    ["San Juan", "Backus", 620_000],
+  ],
+  gaseosas: [
+    ["Kola Real", "AJE", 3_842_000],
+    ["Coca-Cola", "Lindley", 3_010_000],
+    ["Guaraná", "Backus", 1_430_000],
+    ["Concordia", "Backus", 780_000],
+    ["Big Cola", "AJE", 540_000],
+  ],
+  lacteos: [
+    ["Laive", "Laive", 2_126_000],
+    ["Pura Vida", "Gloria", 1_190_000],
+    ["Bella Holandesa", "Gloria", 630_000],
+    ["Ideal", "Nestlé", 410_000],
+  ],
+  aguas: [
+    ["Cielo", "AJE", 923_000],
+    ["San Mateo", "Backus", 785_000],
+    ["Socosani", "Backus", 230_000],
+  ],
+};
+
+/** "Leche Gloria" → "leche-gloria" (sin tildes ni espacios, apto para URL) */
+function slugify(text: string): string {
+  return text
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "");
+}
+
+export function mockContenders(categorySlug: string, leaderTotalCents: number): Contender[] {
+  return (MOCK_CONTENDERS[categorySlug] ?? []).map(([name, company, totalCents], index) => ({
+    // index 0 es el #2: el #1 es el líder
+    position: index + 2,
+    product: { slug: slugify(name), name, company, imageUrl: null },
+    totalCents,
+    // Para pasarlo no basta con igualarlo: hace falta S/ 1 más (100 céntimos)
+    missingCents: leaderTotalCents - totalCents + 100,
+  }));
+}

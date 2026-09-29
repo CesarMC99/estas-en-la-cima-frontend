@@ -45,6 +45,21 @@ export interface DonorComment {
   media: DonorMedia | null;
 }
 
+/** Un producto que persigue al #1 en la página de su categoría */
+export interface Contender {
+  position: number;
+  product: Product;
+  totalCents: number;
+  /** Lo que le falta para superar al #1 (su diferencia + S/ 1) */
+  missingCents: number;
+}
+
+/** Página de una categoría: su líder destacado y la cola que lo persigue */
+export interface CategoryRanking {
+  leader: CategoryCima;
+  contenders: Contender[];
+}
+
 /** El #1 de una categoría, tal como se muestra en "Las cimas" */
 export interface CategoryCima {
   category: Category;

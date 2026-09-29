@@ -1,6 +1,6 @@
 import { CimaCard } from "@/features/(ranking)/cimas/CimaCard";
-import { CimaHero } from "@/features/(ranking)/cimas/CimaHero";
-import { MOCK_CIMAS } from "@/features/(ranking)/mock-data";
+import { CimaSpotlight } from "@/features/(ranking)/components/CimaSpotlight";
+import { getCimas } from "@/features/(ranking)/data";
 
 /**
  * Página principal "Las cimas": solo el #1 de cada categoría, ordenados del
@@ -9,11 +9,10 @@ import { MOCK_CIMAS } from "@/features/(ranking)/mock-data";
  *
  * La página solo compone: los datos llegan listos y ordenados, y cada tarjeta
  * sabe dibujarse sola. Así, cuando cambiemos los datos de ejemplo por la API,
- * solo cambiará la línea que obtiene `cimas`.
+ * solo cambiará la función getCimas() y esta página seguirá igual.
  */
-export default function CimasPage() {
-  // TEMPORAL: se reemplaza por la consulta GraphQL de las cimas
-  const cimas = MOCK_CIMAS;
+export default async function CimasPage() {
+  const cimas = await getCimas();
   const [first, ...rest] = cimas;
 
   if (!first) {
@@ -35,7 +34,9 @@ export default function CimasPage() {
         </span>
       </div>
 
-      <CimaHero cima={first} position={1} />
+      <div className="mb-5">
+        <CimaSpotlight cima={first} position={1} headingLevel="h2" showRankingLink />
+      </div>
 
       {/*
         Grilla sin media queries: entran tantas columnas de al menos 300px como

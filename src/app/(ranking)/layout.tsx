@@ -1,7 +1,7 @@
 import { CategoryNav } from "@/components/shared/CategoryNav";
 import { DecorativeBackground } from "@/components/shared/DecorativeBackground";
 import { SiteHeader } from "@/components/shared/SiteHeader";
-import { MOCK_CATEGORIES } from "@/features/(ranking)/mock-data";
+import { getCategories } from "@/features/(ranking)/data";
 
 /**
  * Marco común de las páginas del ranking ("Las cimas" y cada categoría):
@@ -11,7 +11,9 @@ import { MOCK_CATEGORIES } from "@/features/(ranking)/mock-data";
  * para que las pantallas de acceso (login, registro) tengan su propio layout
  * con otro fondo, sin heredar esta cabecera.
  */
-export default function RankingLayout({ children }: LayoutProps<"/">) {
+export default async function RankingLayout({ children }: LayoutProps<"/">) {
+  const categories = await getCategories();
+
   return (
     <div className="relative min-h-screen overflow-hidden">
       <DecorativeBackground />
@@ -19,8 +21,7 @@ export default function RankingLayout({ children }: LayoutProps<"/">) {
       {/* z-10: el contenido va por encima de la capa decorativa */}
       <div className="relative z-10 mx-auto max-w-[1200px] px-[clamp(16px,4vw,32px)]">
         <SiteHeader />
-        {/* TEMPORAL: las categorías vendrán de la API */}
-        <CategoryNav categories={MOCK_CATEGORIES} />
+        <CategoryNav categories={categories} />
 
         <main>{children}</main>
 
