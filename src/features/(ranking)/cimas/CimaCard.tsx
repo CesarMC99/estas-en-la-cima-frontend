@@ -14,7 +14,7 @@ import type { CategoryCima } from "../types";
 
 /**
  * Tarjeta de los demás #1 (del segundo en adelante). Misma información que
- * CimaHero pero compacta, para que varias quepan en una grilla.
+ * CimaSpotlight pero compacta, para que varias quepan en una grilla.
  */
 export function CimaCard({ cima, position }: { cima: CategoryCima; position: number }) {
   const { category, product } = cima;

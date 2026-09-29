@@ -27,6 +27,8 @@
   --color-lilac: #e0d2e6;
   --color-lilac-soft: #c9b8d0;
   --color-lilac-muted: #b3a1bb;
+  /* Texto de ejemplo dentro de los campos (placeholder) */
+  --color-lilac-faint: #8f7d99;
 
   /*
    * "mist" es el lila casi blanco que el diseño usa con transparencia para

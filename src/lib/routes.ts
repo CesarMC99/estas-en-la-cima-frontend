@@ -6,5 +6,9 @@
 export const routes = {
   home: "/",
   login: "/ingresar",
+  register: "/registro",
+  recoverPassword: "/recuperar",
+  terms: "/terminos",
+  communityRules: "/reglas",
   category: (slug: string) => `/categoria/${slug}`,
 } as const;
