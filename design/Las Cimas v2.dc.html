@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<script src="./image-slot.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#1f0d33;color:#fff6ec;font-family:Figtree,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:#ffd400;text-decoration:none}a:hover{color:#ffe54d;text-decoration:underline}
+*{box-sizing:border-box}
+</style>
+</helmet>
+<div style="min-height:100vh;background:#1f0d33;position:relative;overflow:hidden">
+  <div aria-hidden="true" style="position:absolute;inset:0;pointer-events:none;z-index:0">
+    <div style="position:absolute;top:-160px;right:-160px;width:460px;height:460px;border-radius:50%;background:#ff2e88"></div>
+    <div style="position:absolute;top:-60px;right:-60px;width:260px;height:260px;border-radius:50%;border:22px solid #ffd400"></div>
+    <svg style="position:absolute;top:300px;right:0;width:40%;height:24px" preserveAspectRatio="none" viewBox="0 0 200 24"><polyline points="0,20 10,4 20,20 30,4 40,20 50,4 60,20 70,4 80,20 90,4 100,20 110,4 120,20 130,4 140,20 150,4 160,20 170,4 180,20 190,4 200,20" fill="none" stroke="#ffd400" stroke-width="4"></polyline></svg>
+        <div style="position:absolute;top:120px;left:-40px;width:180px;height:180px;background-image:radial-gradient(#4fe0ff 3px,transparent 3.5px);background-size:22px 22px;opacity:0.7"></div>
+    <div style="position:absolute;top:520px;left:-110px;width:240px;height:240px;border-radius:50%;border:26px solid #ff8a1f"></div>
+    <div style="position:absolute;top:44%;right:-40px;width:120px;height:120px;background-image:repeating-linear-gradient(45deg,#ffd400 0 10px,transparent 10px 20px);border-radius:50%"></div>
+    <div style="position:absolute;top:58%;left:-60px;width:160px;height:160px;border-radius:50%;border:20px dotted #ff2e88"></div>
+    <div style="position:absolute;top:36%;left:48%;width:22px;height:22px;background:#ffd400;transform:rotate(45deg)"></div>
+    <div style="position:absolute;top:74%;right:14%;width:36px;height:36px;background:#36f07a;transform:rotate(45deg)"></div>
+    <div style="position:absolute;bottom:0;left:0;right:0;height:320px;display:flex;align-items:flex-end;pointer-events:auto">
+      <div style="flex:1;height:260px;position:relative"><image-slot id="cima-cebiche" shape="rect" mask="polygon(50% 0, 100% 100%, 0 100%)" placeholder="Cebiche"></image-slot></div>
+      <div style="flex:1.4;height:320px;margin-left:-8%;position:relative"><image-slot id="cima-machu-picchu" shape="rect" mask="polygon(50% 0, 100% 100%, 0 100%)" placeholder="Machu Picchu"></image-slot></div>
+      <div style="flex:1;height:240px;margin-left:-8%;position:relative"><image-slot id="cima-lomo-saltado" shape="rect" mask="polygon(50% 0, 100% 100%, 0 100%)" placeholder="Lomo saltado"></image-slot></div>
+      <div style="flex:1.2;height:300px;margin-left:-8%;position:relative"><image-slot id="cima-danza-tijeras" shape="rect" mask="polygon(50% 0, 100% 100%, 0 100%)" placeholder="Danza de tijeras"></image-slot></div>
+      <div style="flex:1;height:230px;margin-left:-8%;position:relative"><image-slot id="cima-retablo" shape="rect" mask="polygon(50% 0, 100% 100%, 0 100%)" placeholder="Retablo ayacuchano"></image-slot></div>
+    </div>
+  </div>
+  <div style="position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:0 clamp(16px,4vw,32px);pointer-events:none">
+    <header style="pointer-events:auto;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:20px 0 16px">
+      <div style="display:flex;align-items:center;gap:12px">
+        <svg width="44" height="44" viewBox="0 0 44 44" aria-hidden="true">
+          <polygon points="4,40 22,14 40,40" fill="#ff2e88"></polygon>
+          <polygon points="16,40 22,31 28,40" fill="#1f0d33"></polygon>
+          <polygon points="13,12 16,4 22,9 28,4 31,12" fill="#ffd400"></polygon>
+        </svg>
+        <div style="display:flex;flex-direction:column;gap:2px">
+          <div style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:24px;line-height:1;letter-spacing:-0.02em;color:#fff6ec">Estás en la cima</div>
+          <div style="font-size:13px;font-weight:600;color:#e0d2e6">Paga, sube y quédate en la cima… si puedes.</div>
+        </div>
+      </div>
+      <a href="Acceso.dc.html#login" style="flex:none;display:flex;align-items:center;min-height:44px;padding:0 18px;border-radius:999px;background:#140a1f;border:1px solid rgba(255,220,255,0.3);color:#fff6ec;font-weight:700;font-size:15px;text-decoration:none">Ingresar</a>
+    </header>
+
+    <nav style="pointer-events:auto;display:flex;gap:8px;overflow-x:auto;padding:4px 0 20px;margin:0 -4px;scrollbar-width:none">
+      <sc-for list="{{ chips }}" as="chip" hint-placeholder-count="5">
+        <button onClick="{{ chip.onClick }}" style="flex:none;font-family:Figtree,sans-serif;font-size:15px;font-weight:600;padding:10px 18px;min-height:44px;border-radius:999px;cursor:pointer;background:{{ chip.bg }};color:{{ chip.fg }};border:1px solid {{ chip.border }}">{{ chip.label }}</button>
+      </sc-for>
+    </nav>
+
+    <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;padding-bottom:16px;pointer-events:auto">
+      <h1 style="margin:0;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:clamp(32px,6vw,48px);letter-spacing:-0.03em;line-height:1;color:#fff6ec">Aquí manda el que pone</h1>
+      <div style="font-size:14px;font-weight:600;color:#e0d2e6;background:rgba(20,10,31,0.85);padding:4px 10px;border-radius:999px">Los #1 de cada categoría</div>
+    </div>
+
+    <sc-if value="{{ hero }}" hint-placeholder-val="{{ true }}">
+      <article style="pointer-events:auto;position:relative;overflow:hidden;border-radius:24px;border:2px solid #ffd400;background:#140a1f;box-shadow:8px 8px 0 #ff2e88;padding:clamp(20px,4vw,40px);display:flex;flex-wrap:wrap;gap:clamp(24px,4vw,48px);margin-bottom:20px">
+        <div style="flex:1 1 340px;min-width:0;display:flex;flex-direction:column;gap:14px">
+          <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+            <div style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:18px;color:#110c14;background:#ffd400;border-radius:10px;padding:4px 12px">#{{ hero.pos }}</div>
+            <div style="display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#ffd400;border:1px solid rgba(255,212,0,0.5);border-radius:999px;padding:6px 12px">
+              <svg width="14" height="10" viewBox="0 0 14 10"><polygon points="0,10 1,1 4.5,5 7,0 9.5,5 13,1 14,10" fill="#ffd400"></polygon></svg>
+              {{ hero.crown }}
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:clamp(14px,3vw,24px)">
+          <div style="flex:none;width:clamp(110px,18vw,160px);height:clamp(110px,18vw,160px);position:relative;border-radius:20px;background:repeating-linear-gradient(135deg,#2e1f33 0 8px,#261a2b 8px 16px)"><image-slot id="{{ hero.pid }}" shape="rounded" radius="20" placeholder="Foto del producto"></image-slot></div>
+          <div style="display:flex;flex-direction:column;gap:8px;min-width:0">
+            <h2 style="margin:0;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:clamp(40px,8vw,72px);line-height:0.95;letter-spacing:-0.035em;text-wrap:balance">{{ hero.product }}</h2>
+            <div style="align-self:flex-start;font-size:12px;font-weight:600;color:#c9b8d0;background:rgba(255,220,255,0.08);border-radius:6px;padding:3px 8px">{{ hero.company }}</div>
+          </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:4px;padding-top:8px">
+            <div style="font-size:13px;font-weight:600;color:#c9b8d0;text-transform:uppercase;letter-spacing:0.08em">Total acumulado</div>
+            <div style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:clamp(56px,12vw,112px);line-height:0.9;letter-spacing:-0.04em;color:#ffd400;font-variant-numeric:tabular-nums"><span style="font-size:0.45em;vertical-align:0.7em;margin-right:6px">S/</span>{{ hero.total }}</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:17px;font-weight:600;color:#fff6ec">
+            <span style="width:10px;height:10px;border-radius:50%;background:#36f07a;flex:none"></span>
+            <span>{{ hero.rival }} está a <strong style="color:#ff5ca8;font-family:'Bricolage Grotesque',sans-serif;font-size:20px">S/ {{ hero.gap }}</strong></span>
+          </div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;padding-top:12px">
+            <button style="flex:1 1 140px;min-height:52px;border:none;border-radius:14px;background:#ffd400;color:#110c14;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:19px;cursor:pointer" style-hover="background:#ffe54d">Donar</button>
+            <button style="flex:1 1 200px;min-height:52px;border-radius:14px;background:transparent;color:#fff6ec;border:1px solid rgba(255,220,255,0.25);font-family:Figtree,sans-serif;font-weight:600;font-size:16px;cursor:pointer" style-hover="border-color:#ffd400" onClick="{{ hero.onRank }}">{{ hero.rankLabel }}</button>
+          </div>
+        </div>
+
+        <div style="flex:1 1 380px;min-width:0;display:flex;flex-direction:column;gap:12px">
+          <sc-for list="{{ hero.comments }}" as="c" hint-placeholder-count="3">
+            <div style="display:flex;gap:14px;background:rgba(17,12,20,0.6);border:1px solid {{ c.border }};border-radius:16px;padding:14px">
+              <sc-if value="{{ c.showMedia }}" hint-placeholder-val="{{ false }}">
+                <div style="flex:none;width:clamp(96px,22vw,132px);aspect-ratio:9/16;border-radius:12px;background:repeating-linear-gradient(135deg,#2e1f33 0 8px,#261a2b 8px 16px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:8px;text-align:center">
+                  <sc-if value="{{ isVideo }}" hint-placeholder-val="{{ true }}">
+                    <div style="width:40px;height:40px;border-radius:50%;background:rgba(255,246,236,0.92);display:flex;align-items:center;justify-content:center"><svg width="14" height="16" viewBox="0 0 14 16"><polygon points="1,0 14,8 1,16" fill="#110c14"></polygon></svg></div>
+                  </sc-if>
+                  <div style="font-family:'JetBrains Mono',monospace;font-size:10px;line-height:1.35;color:#e0d2e6">{{ mediaLabel }}</div>
+                </div>
+              </sc-if>
+              <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:8px">
+                <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+                  <span style="font-weight:700;font-size:15px">{{ c.user }}</span>
+                  <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;border-radius:6px;padding:3px 7px;background:{{ c.badgeBg }};color:{{ c.badgeFg }}">{{ c.badge }}</span>
+                </div>
+                <div style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:22px;color:#ffd400;line-height:1">S/ {{ c.amount }}</div>
+                <p style="margin:0;font-size:15px;line-height:1.45;color:#efe6f2;text-wrap:pretty">{{ c.text }}</p>
+                <button onClick="{{ c.onReport }}" style="align-self:flex-start;margin-top:auto;display:flex;align-items:center;gap:6px;background:none;border:none;padding:4px 0;color:{{ c.reportColor }};font-family:Figtree,sans-serif;font-size:12px;font-weight:600;cursor:pointer">
+                  <svg width="10" height="12" viewBox="0 0 10 12"><rect x="0" y="0" width="1.5" height="12" fill="currentColor"></rect><rect x="1.5" y="0.5" width="8" height="6" fill="currentColor"></rect></svg>
+                  {{ c.reportLabel }}
+                </button>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </article>
+    </sc-if>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,340px),1fr));gap:16px;padding-bottom:32px;pointer-events:auto">
+      <sc-for list="{{ rest }}" as="cat" hint-placeholder-count="3">
+        <article style="border-radius:20px;background:#140a1f;border:1px solid rgba(255,220,255,0.14);padding:20px;display:flex;flex-direction:column;gap:14px">
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+            <div style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:15px;color:#fff6ec;background:rgba(255,220,255,0.1);border-radius:8px;padding:3px 10px">#{{ cat.pos }}</div>
+            <div style="display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#ffd400">
+              <svg width="14" height="10" viewBox="0 0 14 10"><polygon points="0,10 1,1 4.5,5 7,0 9.5,5 13,1 14,10" fill="#ffd400"></polygon></svg>
+              {{ cat.crown }}
+            </div>
+          </div>
+          <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap">
+            <div style="display:flex;align-items:center;gap:12px;min-width:0">
+              <div style="flex:none;width:76px;height:76px;position:relative;border-radius:14px;background:repeating-linear-gradient(135deg,#2e1f33 0 8px,#261a2b 8px 16px)"><image-slot id="{{ cat.pid }}" shape="rounded" radius="14" placeholder="Foto"></image-slot></div>
+              <div style="display:flex;flex-direction:column;gap:6px;min-width:0">
+              <h3 style="margin:0;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:32px;line-height:1;letter-spacing:-0.03em">{{ cat.product }}</h3>
+              <div style="align-self:flex-start;font-size:12px;font-weight:600;color:#c9b8d0;background:rgba(255,220,255,0.08);border-radius:6px;padding:3px 8px">{{ cat.company }}</div>
+              </div>
+            </div>
+            <div style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:40px;line-height:0.9;letter-spacing:-0.03em;color:#ffd400;font-variant-numeric:tabular-nums"><span style="font-size:0.5em;vertical-align:0.5em;margin-right:4px">S/</span>{{ cat.total }}</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:15px;font-weight:600">
+            <span style="width:8px;height:8px;border-radius:50%;background:#36f07a;flex:none"></span>
+            <span>{{ cat.rival }} está a <strong style="color:#ff5ca8">S/ {{ cat.gap }}</strong></span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:0;border-top:1px solid rgba(255,220,255,0.08)">
+            <sc-for list="{{ cat.comments }}" as="c" hint-placeholder-count="3">
+              <div style="display:flex;gap:12px;padding:12px 0;border-bottom:1px solid rgba(255,220,255,0.08)">
+                <sc-if value="{{ c.showMedia }}" hint-placeholder-val="{{ false }}">
+                  <div style="flex:none;width:72px;aspect-ratio:9/16;border-radius:10px;background:repeating-linear-gradient(135deg,#2e1f33 0 7px,#261a2b 7px 14px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:4px;text-align:center">
+                    <sc-if value="{{ isVideo }}" hint-placeholder-val="{{ true }}">
+                      <div style="width:28px;height:28px;border-radius:50%;background:rgba(255,246,236,0.92);display:flex;align-items:center;justify-content:center"><svg width="10" height="12" viewBox="0 0 14 16"><polygon points="1,0 14,8 1,16" fill="#110c14"></polygon></svg></div>
+                    </sc-if>
+                    <div style="font-family:'JetBrains Mono',monospace;font-size:9px;line-height:1.3;color:#e0d2e6">{{ mediaShort }}</div>
+                  </div>
+                </sc-if>
+                <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:6px">
+                  <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+                    <span style="font-weight:700;font-size:14px">{{ c.user }}</span>
+                    <span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;border-radius:5px;padding:2px 6px;background:{{ c.badgeBg }};color:{{ c.badgeFg }}">{{ c.badge }}</span>
+                    <span style="margin-left:auto;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:16px;color:#ffd400">S/ {{ c.amount }}</span>
+                  </div>
+                  <p style="margin:0;font-size:14px;line-height:1.45;color:#efe6f2;text-wrap:pretty">{{ c.text }}</p>
+                  <button onClick="{{ c.onReport }}" style="align-self:flex-start;display:flex;align-items:center;gap:6px;background:none;border:none;padding:2px 0;color:{{ c.reportColor }};font-family:Figtree,sans-serif;font-size:12px;font-weight:600;cursor:pointer">
+                    <svg width="10" height="12" viewBox="0 0 10 12"><rect x="0" y="0" width="1.5" height="12" fill="currentColor"></rect><rect x="1.5" y="0.5" width="8" height="6" fill="currentColor"></rect></svg>
+                    {{ c.reportLabel }}
+                  </button>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:auto">
+            <button style="flex:1 1 100px;min-height:48px;border:none;border-radius:12px;background:#ffd400;color:#110c14;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:17px;cursor:pointer" style-hover="background:#ffe54d">Donar</button>
+            <button style="flex:1 1 180px;min-height:48px;border-radius:12px;background:transparent;color:#fff6ec;border:1px solid rgba(255,220,255,0.22);font-family:Figtree,sans-serif;font-weight:600;font-size:15px;cursor:pointer" style-hover="border-color:#ffd400" onClick="{{ cat.onRank }}">{{ cat.rankLabel }}</button>
+          </div>
+        </article>
+      </sc-for>
+    </div>
+
+    <footer style="border-top:1px solid rgba(255,220,255,0.08);padding:20px 0 320px;display:flex;flex-direction:column;gap:6px;pointer-events:none;font-size:13px;font-weight:600;color:#e0d2e6">
+      
+      <div style="align-self:flex-start;background:rgba(20,10,31,0.85);padding:4px 10px;border-radius:999px">Todo comentario, foto o video pasa por revisión antes de publicarse.</div>
+    </footer>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;destacarPrimero&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;},&quot;mediaTipo&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;video&quot;,&quot;foto&quot;],&quot;default&quot;:&quot;video&quot;,&quot;tsType&quot;:&quot;'video'|'foto'&quot;},&quot;mostrarMedia&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;}}">
+class Component extends DCLogic {
+  state = { chip: 'Las cimas', reported: {} };
+  data() {
+    return [
+      { pos: 1, crown: 'La mejor cerveza', product: 'Pilsen Callao', company: 'Backus', total: '48,320', rival: 'Cristal', gap: '1,200', rankLabel: 'Ver ranking de cervezas', donor: '@chalaco_de_ley', comments: [
+        ['@chalaco_de_ley', '6,500', 'Chalaco de corazón. Cristal, ve buscando tu sitio en la tabla, que acá arriba no hay espacio.'],
+        ['@la_rubia_del_barrio', '3,200', 'Mi viejo tomaba Pilsen, mi abuelo tomaba Pilsen. Tradición es tradición, causa.'],
+        ['@pichanguero99', '1,450', 'Aporté pa\u2019 que no nos pasen. No aflojen que Cristal viene con todo.']] },
+      { pos: 2, crown: 'La mejor gaseosa', product: 'Inca Kola', company: 'Lindley', total: '41,870', rival: 'Kola Real', gap: '3,450', rankLabel: 'Ver ranking de gaseosas', donor: '@amarillo_de_corazon', comments: [
+        ['@amarillo_de_corazon', '5,200', 'Sabor nacional, compadre. Con un cebiche no hay otra.'],
+        ['@la_tia_del_menu', '2,100', 'En mi menú de S/ 12 va Inca Kola sí o sí.'],
+        ['@kolaboy_2006', '950', 'Kola Real, ni lo intentes.']] },
+      { pos: 3, crown: 'La mejor leche', product: 'Leche Gloria', company: 'Gloria', total: '22,150', rival: 'Laive', gap: '890', rankLabel: 'Ver ranking de lácteos', donor: '@tarrito_azul', comments: [
+        ['@tarrito_azul', '3,000', 'El tarrito es patrimonio. Laive, a S/ 890 te quedaste.'],
+        ['@desayuno_con_pan', '1,300', 'Con pan con chicharrón y su lechita. Así se empieza el día.'],
+        ['@mami_de_4', '620', 'Crié a cuatro con esta leche. Aquí mi aporte.']] },
+      { pos: 4, crown: 'La mejor agua', product: 'San Luis', company: 'Lindley', total: '9,640', rival: 'Cielo', gap: '410', rankLabel: 'Ver ranking de aguas', donor: '@hidratado_pe', comments: [
+        ['@hidratado_pe', '1,800', 'Agua es agua, pero esta es la que está en la cima.'],
+        ['@runner_miraflores', '700', 'Diez kilómetros por el malecón y una San Luis bien helada.'],
+        ['@gym_rat_lima', '350', 'Cielo, te faltan S/ 410. Suerte con eso.']] }
+    ];
+  }
+  renderVals() {
+    const isVideo = (this.props.mediaTipo ?? 'video') === 'video';
+    const showMedia = this.props.mostrarMedia ?? true;
+    const highlight = this.props.destacarPrimero ?? true;
+    const badges = [
+      { badge: 'Mayor donante', badgeBg: '#ffd400', badgeFg: '#110c14', border: 'rgba(255,212,0,0.45)' },
+      { badge: 'Donante #2', badgeBg: '#4fe0ff', badgeFg: '#110c14', border: 'rgba(255,220,255,0.1)' },
+      { badge: 'Donante #3', badgeBg: '#ff8a1f', badgeFg: '#110c14', border: 'rgba(255,220,255,0.1)' }
+    ];
+    const slugs = ['cervezas','gaseosas','lacteos','aguas'];
+    const pid = s => 'prod-' + s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-');
+    const cats = this.data().map((cat, ci) => ({
+      ...cat, pid: pid(cat.product), onRank: () => { location.href = 'Categoria.dc.html#' + slugs[ci]; },
+      comments: cat.comments.map(([user, amount, text], ki) => {
+        const key = ci + '-' + ki;
+        const rep = !!this.state.reported[key];
+        return {
+          user, amount, text, ...badges[ki],
+          showMedia: showMedia && ki === 0,
+          reportLabel: rep ? 'Reportado' : 'Reportar',
+          reportColor: rep ? '#ff5ca8' : '#b3a1bb',
+          onReport: () => this.setState(s => ({ reported: { ...s.reported, [key]: !s.reported[key] } }))
+        };
+      })
+    }));
+    const chips = ['Las cimas', 'Gaseosas', 'Cervezas', 'Lácteos', 'Aguas'].map(label => {
+      const on = label === this.state.chip;
+      return { label, bg: on ? '#ffd400' : 'rgba(31,13,51,0.75)', fg: on ? '#110c14' : '#fff6ec', border: on ? '#ffd400' : 'rgba(255,220,255,0.3)', onClick: () => { const k = {Gaseosas:'gaseosas',Cervezas:'cervezas','Lácteos':'lacteos',Aguas:'aguas'}[label]; if (k) location.href = 'Categoria.dc.html#' + k; else this.setState({ chip: label }); } };
+    });
+    return {
+      chips, isVideo,
+      mediaLabel: isVideo ? 'video del mayor donante · 0:12' : 'foto del mayor donante',
+      mediaShort: isVideo ? '0:12' : 'foto',
+      hero: highlight ? cats[0] : null,
+      rest: highlight ? cats.slice(1) : cats
+    };
+  }
+}
+</script>
+</body>
+</html>

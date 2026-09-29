@@ -1,26 +1,75 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/*
+ * Paleta del diseño "Estás en la cima" (ver design/*.dc.html).
+ * Se declara en @theme para que Tailwind genere utilidades con nombre
+ * (bg-night, text-gold, border-mist/14…) en vez de repetir hex por todo el
+ * código: si mañana cambia el dorado, se cambia aquí y en ningún otro lugar.
+ */
+@theme {
+  /* Fondos: la página es "night"; las tarjetas, un tono más oscuro ("panel") */
+  --color-night: #1f0d33;
+  --color-panel: #140a1f;
+  --color-ink: #110c14;
+
+  /* Acentos. El dorado es el color de "la cima": coronas, montos y botón Donar */
+  --color-gold: #ffd400;
+  --color-gold-light: #ffe54d;
+  --color-magenta: #ff2e88;
+  --color-pink: #ff5ca8;
+  --color-cyan: #4fe0ff;
+  --color-green: #36f07a;
+  --color-orange: #ff8a1f;
+
+  /* Textos sobre fondo oscuro, de más a menos protagonismo */
+  --color-cream: #fff6ec;
+  --color-comment: #efe6f2;
+  --color-lilac: #e0d2e6;
+  --color-lilac-soft: #c9b8d0;
+  --color-lilac-muted: #b3a1bb;
+
+  /*
+   * "mist" es el lila casi blanco que el diseño usa con transparencia para
+   * bordes y fondos sutiles. Declararlo como color permite escribir
+   * border-mist/14 o bg-mist/8 en vez de rgba(255,220,255,0.14).
+   */
+  --color-mist: #ffdcff;
+
+  /*
+   * Alto de la franja del collage de fotos al pie de la página (= su foto más
+   * alta). Crece con la pantalla: 140px en celular, hasta 260px en escritorio.
+   * Lo usan el collage (h-collage) y el footer (para dejarle espacio): al vivir
+   * en un solo lugar, si el collage crece, el contenido se aparta solo.
+   */
+  --spacing-collage: clamp(140px, 22vw, 260px);
 }
 
+/*
+ * Las fuentes van en un @theme "inline" porque apuntan a variables que crea
+ * next/font en el <html> (layout raíz). "inline" hace que Tailwind use la
+ * referencia var(--font-figtree) tal cual, en vez de intentar resolverla aquí,
+ * donde todavía no existe.
+ */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-figtree), system-ui, sans-serif;
+  --font-display: var(--font-bricolage), system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, monospace;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/*
+ * Relleno a rayas que el diseño usa mientras no hay foto (producto sin imagen
+ * o video que aún no se muestra). Es una utilidad propia para no copiar el
+ * gradiente en cada componente.
+ */
+@utility bg-stripes {
+  background-image: repeating-linear-gradient(
+    135deg,
+    #2e1f33 0 8px,
+    #261a2b 8px 16px
+  );
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-night);
+  color: var(--color-cream);
 }
