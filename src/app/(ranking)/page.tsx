@@ -37,7 +37,12 @@ export default function CimasPage() {
 
       <CimaHero cima={first} position={1} />
 
-      <div className="grid grid-cols-[repeat(auto-fill,minmax(min(100%,340px),1fr))] gap-4 pb-8">
+      {/*
+        Grilla sin media queries: entran tantas columnas de al menos 300px como
+        quepan (1 en celular, 2 en tablet, 3 en escritorio). El min(100%, …)
+        evita que en pantallas de menos de 300px la tarjeta se salga del borde.
+      */}
+      <div className="grid grid-cols-[repeat(auto-fill,minmax(min(100%,300px),1fr))] gap-4 pb-8">
         {rest.map((cima, index) => (
           // index + 2: el primero ya se mostró en la tarjeta grande
           <CimaCard key={cima.category.slug} cima={cima} position={index + 2} />
