@@ -10,6 +10,10 @@ import { getCategoryRanking } from "@/features/(ranking)/data";
  *
  * En Next 16 `params` es una Promesa: hay que esperarla con await antes de
  * leer el slug (el acceso síncrono se eliminó en esta versión).
+ *
+ * generateMetadata y la página piden el mismo ranking, pero no se hace dos
+ * veces: el cliente de Apollo del servidor es uno por petición y la segunda
+ * lectura sale de su caché.
  */
 
 /** Título de la pestaña: "Cervezas · Estás en la cima" (la plantilla está en el layout raíz) */
@@ -18,10 +22,12 @@ export async function generateMetadata({ params }: PageProps<"/categoria/[slug]"
   const ranking = await getCategoryRanking(slug);
   if (!ranking) return {};
 
-  const { category, product } = ranking.leader;
+  const { category, leader } = ranking;
   return {
     title: category.name,
-    description: `${product.name} está en la cima como ${category.crownTitle.toLowerCase()}. ¿Quién le quita el trono?`,
+    description: leader
+      ? `${leader.product.name} está en la cima como ${category.crownTitle.toLowerCase()}. ¿Quién le quita el trono?`
+      : `¿Cuál es ${category.crownTitle.toLowerCase()}? La cima está libre.`,
   };
 }
 
@@ -32,7 +38,19 @@ export default async function CategoryPage({ params }: PageProps<"/categoria/[sl
   // Categoría inexistente (/categoria/lo-que-sea): página 404 en vez de un error
   if (!ranking) notFound();
 
-  const { leader, contenders } = ranking;
+  const { category, leader, contenders } = ranking;
+
+  // Categoría nueva, sin productos aprobados todavía
+  if (!leader) {
+    return (
+      <div className="rounded-3xl border border-dashed border-mist/22 p-[clamp(20px,4vw,40px)]">
+        <h1 className="font-display text-[clamp(32px,6vw,48px)] leading-none font-extrabold tracking-[-0.03em]">
+          {category.name}
+        </h1>
+        <p className="mt-3 text-lg text-lilac">La cima está libre: todavía no hay productos en esta categoría.</p>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -45,7 +63,7 @@ export default async function CategoryPage({ params }: PageProps<"/categoria/[sl
           La cola para la cima
         </h2>
         <span className="rounded-full bg-panel/85 px-2.5 py-1 text-sm font-semibold text-lilac">
-          {leader.category.name}
+          {category.name}
         </span>
       </div>
 

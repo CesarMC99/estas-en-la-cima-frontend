@@ -1,29 +1,35 @@
-import { MOCK_CATEGORIES, MOCK_CIMAS, mockContenders } from "./mock-data";
-import type { Category, CategoryCima, CategoryRanking } from "./types";
+import "server-only";
+import type {
+  CategoryFieldsFragment,
+  CategoryRankingQuery,
+  CimaFieldsFragment,
+} from "@/graphql/generated/graphql";
+import { query } from "@/lib/apollo/server-client";
+import { CATEGORIES_QUERY, CATEGORY_RANKING_QUERY, CIMAS_QUERY } from "./ranking.graphql";
 
 /*
- * Punto único de acceso a los datos del ranking. Las páginas llaman a estas
- * funciones y no saben de dónde salen los datos.
+ * Punto único de acceso a los datos del ranking desde el servidor. Las
+ * páginas llaman a estas funciones y no saben que por dentro es GraphQL.
  *
- * TEMPORAL: hoy leen los datos de ejemplo. Cuando exista la API, solo cambia
- * el cuerpo de estas funciones (harán la consulta GraphQL) y ninguna página
- * se toca. Ya son `async` por eso: la versión real esperará a la red, y así
- * las páginas se escriben desde ahora con `await`.
+ * "server-only" hace que el build falle si algún componente del navegador
+ * intenta importar este archivo por error.
  */
 
-export async function getCategories(): Promise<Category[]> {
-  return MOCK_CATEGORIES;
+export async function getCategories(): Promise<CategoryFieldsFragment[]> {
+  const { data } = await query({ query: CATEGORIES_QUERY });
+  return data?.categories ?? [];
 }
 
 /** Los #1 de cada categoría, del que más dinero junta al que menos */
-export async function getCimas(): Promise<CategoryCima[]> {
-  return MOCK_CIMAS;
+export async function getCimas(): Promise<CimaFieldsFragment[]> {
+  const { data } = await query({ query: CIMAS_QUERY });
+  return data?.cimas ?? [];
 }
 
 /** Ranking completo de una categoría, o null si la categoría no existe */
-export async function getCategoryRanking(slug: string): Promise<CategoryRanking | null> {
-  const leader = MOCK_CIMAS.find((cima) => cima.category.slug === slug);
-  if (!leader) return null;
-
-  return { leader, contenders: mockContenders(slug, leader.totalCents) };
+export async function getCategoryRanking(
+  slug: string,
+): Promise<CategoryRankingQuery["categoryRanking"]> {
+  const { data } = await query({ query: CATEGORY_RANKING_QUERY, variables: { slug } });
+  return data?.categoryRanking ?? null;
 }

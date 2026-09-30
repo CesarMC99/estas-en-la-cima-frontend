@@ -12,7 +12,13 @@ import { getCategories } from "@/features/(ranking)/data";
  * con otro fondo, sin heredar esta cabecera.
  */
 export default async function RankingLayout({ children }: LayoutProps<"/">) {
-  const categories = await getCategories();
+  /*
+   * Si la API falla, el layout NO debe romperse: error.tsx solo protege a la
+   * página (lo que va dentro del layout), no al layout mismo. Sin categorías
+   * los chips muestran solo "Las cimas", y el error de la página se ve con
+   * la cabecera y el fondo intactos.
+   */
+  const categories = await getCategories().catch(() => []);
 
   return (
     <div className="relative min-h-screen overflow-hidden">

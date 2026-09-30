@@ -1,7 +1,9 @@
 import { PlayIcon } from "@/components/shared/icons";
+import type { DonorCommentFieldsFragment } from "@/graphql/generated/graphql";
 import { formatSoles } from "@/lib/money";
-import type { DonorComment, DonorMedia, DonorRank } from "../types";
 import { ReportButton } from "./ReportButton";
+
+type DonorMedia = NonNullable<DonorCommentFieldsFragment["media"]>;
 
 /*
  * Comentario de uno de los 3 mayores donantes de un producto.
@@ -14,7 +16,7 @@ import { ReportButton } from "./ReportButton";
  */
 
 /** Insignia y colores según el puesto del donante */
-const RANK_STYLES: Record<DonorRank, { label: string; badge: string; border: string }> = {
+const RANK_STYLES: Record<1 | 2 | 3, { label: string; badge: string; border: string }> = {
   1: { label: "Mayor donante", badge: "bg-gold", border: "border-gold/45" },
   2: { label: "Donante #2", badge: "bg-cyan", border: "border-mist/10" },
   3: { label: "Donante #3", badge: "bg-orange", border: "border-mist/10" },
@@ -22,8 +24,9 @@ const RANK_STYLES: Record<DonorRank, { label: string; badge: string; border: str
 
 type Variant = "featured" | "compact";
 
-export function DonorCommentCard({ comment, variant }: { comment: DonorComment; variant: Variant }) {
-  const style = RANK_STYLES[comment.rank];
+export function DonorCommentCard({ comment, variant }: { comment: DonorCommentFieldsFragment; variant: Variant }) {
+  // La API solo manda los puestos 1, 2 y 3; ante cualquier otro valor se usa el estilo del #3
+  const style = RANK_STYLES[comment.rank === 1 || comment.rank === 2 ? comment.rank : 3];
   const isFeatured = variant === "featured";
 
   const badge = (
@@ -75,7 +78,7 @@ export function DonorCommentCard({ comment, variant }: { comment: DonorComment; 
  * relleno a rayas; luego aquí irá el <video> o la <img>.
  */
 function MediaPreview({ media, size }: { media: DonorMedia; size: Variant }) {
-  const isVideo = media.type === "video";
+  const isVideo = media.kind === "VIDEO";
   const isFeatured = size === "featured";
 
   const label = isVideo
@@ -97,5 +100,24 @@ function MediaPreview({ media, size }: { media: DonorMedia; size: Variant }) {
       )}
       <span className={`font-mono leading-[1.35] text-lilac ${isFeatured ? "text-[10px]" : "text-[9px]"}`}>{label}</span>
     </div>
+  );
+}
+
+/**
+ * Mientras nadie comenta: invita a donar. Los 3 mayores donantes de cada #1
+ * se ganan un espacio aquí.
+ */
+export function NoCommentsYet({ productName, compact = false }: { productName: string; compact?: boolean }) {
+  return (
+    <p
+      className={
+        compact
+          ? "py-3 text-sm text-lilac"
+          : "rounded-2xl border border-dashed border-mist/22 p-5 text-[15px] leading-relaxed text-lilac"
+      }
+    >
+      Todavía no hay comentarios. Los 3 mayores donantes de {productName} se ganan un espacio aquí
+      {compact ? "." : "; el primero, además, con foto o video."}
+    </p>
   );
 }

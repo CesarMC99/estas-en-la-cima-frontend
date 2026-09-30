@@ -1,7 +1,7 @@
 import Link from "next/link";
+import type { CimaFieldsFragment } from "@/graphql/generated/graphql";
 import { routes } from "@/lib/routes";
-import type { CategoryCima } from "../types";
-import { DonorCommentCard } from "./DonorCommentCard";
+import { DonorCommentCard, NoCommentsYet } from "./DonorCommentCard";
 import {
   Amount,
   CompanyTag,
@@ -13,7 +13,7 @@ import {
 } from "./RankingBits";
 
 interface CimaSpotlightProps {
-  cima: CategoryCima;
+  cima: CimaFieldsFragment;
   /** Puesto que muestra la insignia: en "Las cimas" es el orden entre categorías */
   position: number;
   /**
@@ -88,9 +88,13 @@ export function CimaSpotlight({ cima, position, headingLevel, showRankingLink }:
       </div>
 
       <div className="flex min-w-0 flex-[1_1_380px] flex-col gap-3">
-        {cima.comments.map((comment) => (
-          <DonorCommentCard key={comment.id} comment={comment} variant="featured" />
-        ))}
+        {cima.comments.length > 0 ? (
+          cima.comments.map((comment) => (
+            <DonorCommentCard key={comment.id} comment={comment} variant="featured" />
+          ))
+        ) : (
+          <NoCommentsYet productName={product.name} />
+        )}
       </div>
     </article>
   );

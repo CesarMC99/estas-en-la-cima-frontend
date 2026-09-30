@@ -1,6 +1,6 @@
+import type { ContenderFieldsFragment } from "@/graphql/generated/graphql";
 import { formatSoles } from "@/lib/money";
 import { Amount, CompanyTag, DonateButton, ProductThumb } from "../components/RankingBits";
-import type { Contender } from "../types";
 
 /*
  * Colores de la barra de progreso, en rotación. Son solo decoración: ayudan a
@@ -9,7 +9,7 @@ import type { Contender } from "../types";
 const BAR_COLORS = ["bg-magenta", "bg-cyan", "bg-green", "bg-orange"] as const;
 
 interface ContenderRowProps {
-  contender: Contender;
+  contender: ContenderFieldsFragment;
   /** Total del #1: la barra muestra qué tan cerca está este producto de él */
   leaderTotalCents: number;
 }

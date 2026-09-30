@@ -1,6 +1,7 @@
 import Link from "next/link";
+import type { CimaFieldsFragment } from "@/graphql/generated/graphql";
 import { routes } from "@/lib/routes";
-import { DonorCommentCard } from "../components/DonorCommentCard";
+import { DonorCommentCard, NoCommentsYet } from "../components/DonorCommentCard";
 import {
   Amount,
   CompanyTag,
@@ -10,13 +11,12 @@ import {
   ProductThumb,
   RivalGap,
 } from "../components/RankingBits";
-import type { CategoryCima } from "../types";
 
 /**
  * Tarjeta de los demás #1 (del segundo en adelante). Misma información que
  * CimaSpotlight pero compacta, para que varias quepan en una grilla.
  */
-export function CimaCard({ cima, position }: { cima: CategoryCima; position: number }) {
+export function CimaCard({ cima, position }: { cima: CimaFieldsFragment; position: number }) {
   const { category, product } = cima;
 
   return (
@@ -42,9 +42,13 @@ export function CimaCard({ cima, position }: { cima: CategoryCima; position: num
       <RivalGap rival={cima.rival} />
 
       <div className="flex flex-col border-t border-mist/8">
-        {cima.comments.map((comment) => (
-          <DonorCommentCard key={comment.id} comment={comment} variant="compact" />
-        ))}
+        {cima.comments.length > 0 ? (
+          cima.comments.map((comment) => (
+            <DonorCommentCard key={comment.id} comment={comment} variant="compact" />
+          ))
+        ) : (
+          <NoCommentsYet productName={product.name} compact />
+        )}
       </div>
 
       {/* mt-auto empuja los botones al fondo: tarjetas de la misma fila quedan alineadas */}
