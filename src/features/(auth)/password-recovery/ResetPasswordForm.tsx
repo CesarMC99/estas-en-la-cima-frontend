@@ -1,18 +1,19 @@
 "use client";
 
+import { useMutation } from "@apollo/client/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { TextField } from "@/components/shared/form/TextField";
-import { isEmail } from "@/lib/validation";
-import { requestRecoveryCode, resetPassword, toUserMessage } from "../shared/auth-service";
+import { toUserMessage } from "@/lib/api-errors";
+import { REQUEST_PASSWORD_RESET, RESET_PASSWORD } from "../shared/auth.graphql";
 import { FormHeading } from "../shared/FormHeading";
 import { FormServerError } from "../shared/FormServerError";
 import { SubmitButton } from "../shared/SubmitButton";
 import { resetPasswordSchema, type ResetPasswordValues } from "./password-recovery.schemas";
 
 interface ResetPasswordFormProps {
-  /** Adónde se mandó el código (viene del paso 1) */
+  /** El correo o celular que se escribió en el paso 1 */
   emailOrPhone: string;
   onPasswordChanged: () => void;
   /** Volver al paso 1 si se equivocó de correo/celular */
@@ -21,6 +22,8 @@ interface ResetPasswordFormProps {
 
 /** Paso 2: el código de 6 dígitos y la contraseña nueva */
 export function ResetPasswordForm({ emailOrPhone, onPasswordChanged, onChangeDestination }: ResetPasswordFormProps) {
+  const [resetPassword] = useMutation(RESET_PASSWORD);
+  const [requestPasswordReset] = useMutation(REQUEST_PASSWORD_RESET);
   const [serverError, setServerError] = useState<string | null>(null);
   const [resendState, setResendState] = useState<"idle" | "sending" | "sent">("idle");
 
@@ -29,13 +32,10 @@ export function ResetPasswordForm({ emailOrPhone, onPasswordChanged, onChangeDes
     defaultValues: { code: "", newPassword: "" },
   });
 
-  // El texto cambia según por dónde llegó el código
-  const sentByEmail = isEmail(emailOrPhone);
-
   async function onSubmit(values: ResetPasswordValues) {
     setServerError(null);
     try {
-      await resetPassword({ emailOrPhone, ...values });
+      await resetPassword({ variables: { input: { emailOrPhone, ...values } } });
       onPasswordChanged();
     } catch (error) {
       setServerError(toUserMessage(error));
@@ -46,7 +46,7 @@ export function ResetPasswordForm({ emailOrPhone, onPasswordChanged, onChangeDes
     setServerError(null);
     setResendState("sending");
     try {
-      await requestRecoveryCode({ emailOrPhone });
+      await requestPasswordReset({ variables: { input: { emailOrPhone } } });
       setResendState("sent");
     } catch (error) {
       setResendState("idle");
@@ -58,8 +58,11 @@ export function ResetPasswordForm({ emailOrPhone, onPasswordChanged, onChangeDes
     <form onSubmit={form.handleSubmit(onSubmit)} noValidate className="flex flex-col gap-5">
       <FormHeading
         step="Paso 2 de 3"
-        title={sentByEmail ? "Revisa tu correo" : "Revisa tus mensajes"}
-        subtitle={`Mandamos un código de 6 dígitos a ${emailOrPhone}. Vence en 10 minutos.`}
+        title="Revisa tu correo"
+        // El código siempre va al CORREO de la cuenta, aunque se haya escrito
+        // el celular (enviar SMS cuesta dinero por mensaje). Y no se afirma que
+        // la cuenta exista: "si hay una cuenta…"
+        subtitle="Si hay una cuenta con ese dato, te mandamos un código de 6 dígitos al correo registrado. Vence en 10 minutos."
       />
 
       <div className="flex flex-col gap-3.5">
@@ -71,7 +74,7 @@ export function ResetPasswordForm({ emailOrPhone, onPasswordChanged, onChangeDes
           inputMode="numeric"
           maxLength={6}
           placeholder="000000"
-          // Permite que el celular ofrezca el código del SMS con un toque
+          // Permite que el celular ofrezca el código con un toque
           autoComplete="one-time-code"
         />
         <TextField
@@ -89,7 +92,7 @@ export function ResetPasswordForm({ emailOrPhone, onPasswordChanged, onChangeDes
 
       <div className="flex flex-col items-center gap-2 text-[15px] text-lilac">
         <p className="flex flex-wrap justify-center gap-1.5">
-          ¿No te llegó?
+          ¿No te llegó? Revisa también spam.
           {resendState === "sent" ? (
             <span className="font-bold text-green">Te lo reenviamos</span>
           ) : (

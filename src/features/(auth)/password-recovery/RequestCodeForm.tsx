@@ -1,19 +1,22 @@
 "use client";
 
+import { useMutation } from "@apollo/client/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { TextField } from "@/components/shared/form/TextField";
+import { toUserMessage } from "@/lib/api-errors";
 import { routes } from "@/lib/routes";
-import { requestRecoveryCode, toUserMessage } from "../shared/auth-service";
+import { REQUEST_PASSWORD_RESET } from "../shared/auth.graphql";
 import { FormHeading } from "../shared/FormHeading";
 import { FormServerError } from "../shared/FormServerError";
 import { SubmitButton } from "../shared/SubmitButton";
 import { requestCodeSchema, type RequestCodeValues } from "./password-recovery.schemas";
 
-/** Paso 1: el usuario dice a qué correo o celular le mandamos el código */
+/** Paso 1: el usuario dice cuál es su cuenta (correo o celular) */
 export function RequestCodeForm({ onCodeSent }: { onCodeSent: (emailOrPhone: string) => void }) {
+  const [requestPasswordReset] = useMutation(REQUEST_PASSWORD_RESET);
   const [serverError, setServerError] = useState<string | null>(null);
 
   const form = useForm<RequestCodeValues>({
@@ -25,11 +28,11 @@ export function RequestCodeForm({ onCodeSent }: { onCodeSent: (emailOrPhone: str
     setServerError(null);
     try {
       /*
-       * El backend responderá igual exista o no la cuenta. Si dijera "ese
-       * correo no está registrado", cualquiera podría averiguar quién tiene
-       * cuenta probando correos: se llama "enumeración de usuarios".
+       * La API responde igual exista o no la cuenta. Si dijera "ese correo
+       * no está registrado", cualquiera podría averiguar quién tiene cuenta
+       * probando correos (se llama "enumeración de usuarios").
        */
-      await requestRecoveryCode(values);
+      await requestPasswordReset({ variables: { input: values } });
       onCodeSent(values.emailOrPhone);
     } catch (error) {
       setServerError(toUserMessage(error));
@@ -41,7 +44,7 @@ export function RequestCodeForm({ onCodeSent }: { onCodeSent: (emailOrPhone: str
       <FormHeading
         step="Paso 1 de 3"
         title="¿Se te olvidó? Tranqui"
-        subtitle="Escribe tu correo o celular y te mandamos un código."
+        subtitle="Escribe el correo o celular de tu cuenta y te mandamos un código a tu correo."
       />
       <TextField
         control={form.control}

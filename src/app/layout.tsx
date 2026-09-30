@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Bricolage_Grotesque, Figtree, JetBrains_Mono } from "next/font/google";
+import { ApolloProvider } from "@/providers/ApolloProvider";
+import { SessionProvider } from "@/providers/SessionProvider";
 import "./globals.css";
 
 /*
@@ -39,7 +41,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="es-PE"
       className={`${bricolage.variable} ${figtree.variable} ${jetbrainsMono.variable} antialiased`}
     >
-      <body className="min-h-screen font-sans">{children}</body>
+      <body className="min-h-screen font-sans">
+        {/* Apollo primero: SessionProvider lo usa para cerrar sesión */}
+        <ApolloProvider>
+          <SessionProvider>{children}</SessionProvider>
+        </ApolloProvider>
+      </body>
     </html>
   );
 }

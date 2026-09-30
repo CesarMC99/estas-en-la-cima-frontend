@@ -1,17 +1,22 @@
 "use client";
 
+import { CombinedGraphQLErrors } from "@apollo/client";
+import { useMutation } from "@apollo/client/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { CheckboxField } from "@/components/shared/form/CheckboxField";
 import { TextField } from "@/components/shared/form/TextField";
+import { errorCode, toUserMessage } from "@/lib/api-errors";
 import { routes } from "@/lib/routes";
-import { register, toUserMessage } from "../shared/auth-service";
+import { REDIRECT_PARAM } from "@/lib/safe-redirect";
+import { useSession } from "@/providers/SessionProvider";
+import { REGISTER } from "../shared/auth.graphql";
 import { FormHeading } from "../shared/FormHeading";
 import { FormServerError } from "../shared/FormServerError";
 import { SubmitButton } from "../shared/SubmitButton";
+import { useRedirectIfAuthenticated } from "../shared/use-redirect-if-authenticated";
 import { registerSchema, type RegisterFormInput, type RegisterFormValues } from "./register.schema";
 
 /**
@@ -19,9 +24,11 @@ import { registerSchema, type RegisterFormInput, type RegisterFormValues } from 
  * donar y comentar, porque cada donación y cada comentario necesitan un
  * dueño (@usuario) visible en el ranking.
  */
-export function RegisterForm() {
-  const router = useRouter();
+export function RegisterForm({ redirectTo }: { redirectTo: string }) {
+  const { signIn } = useSession();
+  const [register] = useMutation(REGISTER);
   const [serverError, setServerError] = useState<string | null>(null);
+  useRedirectIfAuthenticated(redirectTo);
 
   // useForm<entrada, contexto, salida>: los campos se escriben con el tipo de
   // ENTRADA y onSubmit recibe los datos ya TRANSFORMADOS por zod
@@ -35,11 +42,19 @@ export function RegisterForm() {
     void acceptTerms;
     setServerError(null);
     try {
-      await register(account);
-      // TEMPORAL: sin backend no hay sesión real; volvemos al inicio
-      router.push(routes.home);
+      const { data } = await register({ variables: { input: account } });
+      // La cuenta queda con la sesión iniciada: useRedirectIfAuthenticated
+      // lleva a la persona a donde iba
+      const session = data?.register;
+      if (session) signIn(session);
     } catch (error) {
-      setServerError(toUserMessage(error));
+      // "Ese correo ya existe": el mensaje va DEBAJO del campo que chocó
+      const field = conflictField(error);
+      if (errorCode(error) === "CONFLICT" && field) {
+        form.setError(field, { message: toUserMessage(error) }, { shouldFocus: true });
+      } else {
+        setServerError(toUserMessage(error));
+      }
     }
   }
 
@@ -110,10 +125,20 @@ export function RegisterForm() {
 
       <p className="flex flex-wrap justify-center gap-1.5 text-[15px] text-lilac">
         ¿Ya tienes cuenta?
-        <Link href={routes.login} className="font-bold text-gold hover:text-gold-light">
+        <Link
+          href={`${routes.login}?${REDIRECT_PARAM}=${encodeURIComponent(redirectTo)}`}
+          className="font-bold text-gold hover:text-gold-light"
+        >
           Ingresa
         </Link>
       </p>
     </form>
   );
+}
+
+/** Campo que ya estaba registrado, según lo que indica la API en el error */
+function conflictField(error: unknown): "username" | "email" | "phone" | null {
+  if (!CombinedGraphQLErrors.is(error)) return null;
+  const field = error.errors[0]?.extensions?.field;
+  return field === "username" || field === "email" || field === "phone" ? field : null;
 }
